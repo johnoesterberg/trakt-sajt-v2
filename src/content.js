@@ -9,6 +9,8 @@ export const content = {
     product: "Sarek",
     notes: "Fjäll. Kall luft. Lav. Sten.",
     closing: "Doften av ett landskap.",
+    loading: "Laddar",
+    imageAlt: "Sarek Eau de Parfum 50 ml",
   },
 
   story: {
