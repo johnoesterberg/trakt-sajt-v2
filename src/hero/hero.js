@@ -1,6 +1,21 @@
 // Kopplar ihop hero-scenen med scrollen: flaskbild, målning, foto, film och texter.
 import { ScrollTrigger } from "../scroll.js";
-import { heroState, WORLD, PAINT } from "./timeline.js";
+import { heroState, WORLD, PAINT, PAPER, INSET } from "./timeline.js";
+
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// Mjuka kanter runt målningen när den ligger som "tryck" på etiketten.
+// Tre lager: [heltäckande (styrs av "sharp")] + ([vänster/höger-toning] ∩ [topp/botten-toning]).
+// När sharp = 1 täcker första lagret allt och kanterna blir raka.
+function paintMask(sharp) {
+  const f = 5; // toningens bredd i % av målningen
+  const l = INSET.left;
+  const r = 100 - INSET.right;
+  const solid = `linear-gradient(rgba(0,0,0,${sharp.toFixed(3)}), rgba(0,0,0,${sharp.toFixed(3)}))`;
+  const sides = `linear-gradient(to right, transparent ${l}%, #000 ${l + f}%, #000 ${r - f}%, transparent ${r}%)`;
+  const ends = "linear-gradient(to bottom, transparent 0%, #000 9%, #000 91%, transparent 100%)";
+  return `${solid}, ${sides}, ${ends}`;
+}
 
 // Var i de breda 16:9-bilderna vi "klipper" på smala skärmar: 0.44 håller fjället i bild.
 const POS_X = 0.44;
@@ -27,6 +42,7 @@ export async function initHero({ section, paintUrl, filmUrl, filmUrlMobile }) {
   const world = q(".hero-world");
   const bottle = q(".w-bottle");
   const paint = q(".w-paint");
+  const paper = q(".w-paper");
   const photo = q(".layer-photo");
   const film = q(".layer-film");
   const texts = { brand: q(".t-brand"), hint: q(".t-hint"), closing: q(".t-closing") };
@@ -40,6 +56,12 @@ export async function initHero({ section, paintUrl, filmUrl, filmUrlMobile }) {
     width: `${PAINT.w}px`,
     height: `${PAINT.h}px`,
     backgroundImage: `url(${paintUrl})`,
+  });
+  Object.assign(paper.style, {
+    left: `${PAPER.x}px`,
+    top: `${PAPER.y}px`,
+    width: `${PAPER.w}px`,
+    height: `${PAPER.h}px`,
   });
   for (const el of [photo, film]) el.style.objectPosition = `${POS_X * 100}% 50%`;
 
@@ -68,9 +90,19 @@ export async function initHero({ section, paintUrl, filmUrl, filmUrlMobile }) {
     world.style.transform = `translate(${s.tx}px, ${s.ty}px) scale(${s.k})`;
     bottle.style.visibility = s.bottleVisible ? "visible" : "hidden";
 
+    paper.style.visibility = s.bottleVisible ? "visible" : "hidden";
+
     paint.style.visibility = s.paintVisible ? "visible" : "hidden";
-    paint.style.opacity = s.paintOpacity.toFixed(3);
-    paint.style.clipPath = `inset(0 ${s.paintInset.toFixed(2)}% 0 ${s.paintInset.toFixed(2)}%)`;
+    paint.style.clipPath = `inset(0 ${s.insetRight.toFixed(2)}% 0 ${s.insetLeft.toFixed(2)}%)`;
+    const mask = paintMask(s.sharp);
+    paint.style.webkitMaskImage = mask;
+    paint.style.maskImage = mask;
+    // Som tryck på papper: något dämpade färger, fulla färger när den fyller skärmen.
+    const t = s.sharp;
+    paint.style.filter =
+      t >= 1
+        ? "none"
+        : `saturate(${lerp(0.78, 1, t).toFixed(3)}) contrast(${lerp(0.9, 1, t).toFixed(3)}) sepia(${lerp(0.12, 0, t).toFixed(3)})`;
 
     show(photo, s.photo);
     show(film, s.film);

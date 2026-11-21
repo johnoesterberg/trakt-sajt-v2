@@ -78,10 +78,25 @@ h3 {
     linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
   mask-composite: intersect;
 }
-/* Målningen ligger exakt över etikettens teckning (position sätts i hero.js) */
+/* Krämfärgad pappersbit som döljer etikettens gamla teckning (färgen uppmätt ur flaskbilden) */
+.w-paper {
+  position: absolute;
+  background: linear-gradient(to right, rgb(242, 232, 221), rgb(239, 229, 217));
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+  mask-composite: intersect;
+}
+/* Målningen ligger exakt över etikettens teckning (position och mask sätts i hero.js) */
 .w-paint {
   position: absolute;
   background-size: 100% 100%;
+  -webkit-mask-composite: source-over, source-in;
+  mask-composite: add, intersect;
 }
 /* Foto och film täcker hela skärmen */
 .layer {

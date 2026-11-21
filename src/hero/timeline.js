@@ -19,15 +19,33 @@ export const ART = { cx: 1375, cy: 1045, w: 320, h: 290 };
 
 // Målningen placeras i världen precis ovanpå etikettens teckning,
 // lika hög som teckningen. Den är 16:9 och därför bredare.
+// FOCUS_X: den punkt i målningen (andel av bredden) som hamnar mitt på etiketten.
+// 0.43 = de stora fjällen.
 const PAINT_ASPECT = 1376 / 768;
+const FOCUS_X = 0.43;
+const PAINT_W = ART.h * PAINT_ASPECT;
 export const PAINT = {
-  w: ART.h * PAINT_ASPECT,
+  w: PAINT_W,
   h: ART.h,
-  x: ART.cx - (ART.h * PAINT_ASPECT) / 2,
+  x: ART.cx - FOCUS_X * PAINT_W,
   y: ART.cy - ART.h / 2,
 };
-// Så mycket (i %) av målningens sidor som döljs när "fönstret" är som minst.
-const INSET_START = ((PAINT.w - ART.w) / 2 / PAINT.w) * 100;
+
+// Hur mycket (i %) av målningens vänstra/högra del som döljs när "fönstret"
+// bara visar etikettens ruta.
+export const INSET = {
+  left: ((ART.cx - ART.w / 2 - PAINT.x) / PAINT.w) * 100,
+  right: ((PAINT.x + PAINT.w - (ART.cx + ART.w / 2)) / PAINT.w) * 100,
+};
+
+// En krämfärgad pappersbit som täcker etikettens gamla teckning helt.
+const PAPER_MARGIN = 14;
+export const PAPER = {
+  x: ART.cx - ART.w / 2 - PAPER_MARGIN,
+  y: ART.cy - ART.h / 2 - PAPER_MARGIN,
+  w: ART.w + PAPER_MARGIN * 2,
+  h: ART.h + PAPER_MARGIN * 2,
+};
 
 // Ungefärlig bredd på själva flaskan i flaskbilden (för att få plats på smala skärmar).
 const BOTTLE_W = 620;
@@ -63,8 +81,9 @@ export function heroState(p, vw, vh, posX = 0.44) {
   const offsetY = lerp(0.08 * vh, 0, e);
 
   // --- Lager ---
-  const paintOpacity = ease(range(u, 0.24, 0.34)); // etikettens teckning → målning
-  const open = ease(range(u, 0.34, 0.54)); // målningens "fönster" vidgas
+  // Målningen syns på etiketten hela tiden, först som ett "tryck" med mjuka kanter.
+  const sharp = ease(range(u, 0.26, 0.38)); // kanterna blir raka, färgerna fulla
+  const open = ease(range(u, 0.32, 0.54)); // målningens "fönster" vidgas
   const photo = ease(range(u, 0.56, 0.66)); // målning → foto
   const film = ease(range(u, 0.64, 0.78)); // foto → film
 
@@ -73,10 +92,11 @@ export function heroState(p, vw, vh, posX = 0.44) {
     tx: vw / 2 - fxNow * k,
     ty: vh / 2 + offsetY - fyNow * k,
     k,
-    paintOpacity,
-    paintInset: (1 - open) * INSET_START,
+    sharp,
+    insetLeft: (1 - open) * INSET.left,
+    insetRight: (1 - open) * INSET.right,
     bottleVisible: u < 0.57,
-    paintVisible: u > 0.2 && u < 0.67,
+    paintVisible: u < 0.67,
     photo,
     film,
     text: {

@@ -25,6 +25,7 @@ const heroHtml = reducedMotion
     <div class="hero-stage" role="img" aria-label="${h.imageAlt}">
       <div class="hero-world">
         <img class="w-bottle" src="${bottleUrl}" alt="" />
+        <div class="w-paper"></div>
         <div class="w-paint"></div>
       </div>
       <img class="layer layer-photo" src="${photoUrl}" alt="" />
