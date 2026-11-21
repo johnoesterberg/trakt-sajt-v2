@@ -1,6 +1,7 @@
 import "./style.css";
 import { content } from "./content.js";
 import { renderSections, setupWaitlist } from "./sections.js";
+import { setupSmoothScroll, setupReveals } from "./scroll.js";
 
 // Hero är än så länge en enkel platshållare – 3D-scenen kommer i ett senare steg.
 document.querySelector("#app").innerHTML = `
@@ -13,3 +14,5 @@ document.querySelector("#app").innerHTML = `
 `;
 
 setupWaitlist();
+setupSmoothScroll();
+setupReveals();
