@@ -47,8 +47,8 @@ h3 {
 .eyebrow, .muted, .note { color: var(--muted); }
 .eyebrow { letter-spacing: 0.3em; font-size: 0.85rem; text-transform: uppercase; }
 
-/* ---------- Hero: 500vh hög, scenen sitter fast (sticky) ---------- */
-.hero { height: 500vh; position: relative; }
+/* ---------- Hero: 800vh hög, scenen sitter fast (sticky) ---------- */
+.hero { height: 800vh; position: relative; }
 .hero-stage {
   position: sticky;
   top: 0;
@@ -57,7 +57,42 @@ h3 {
   overflow: hidden;
   background: var(--bg);
 }
-.hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* "Världen": flaskbilden i full storlek. Flyttas och skalas från hero.js. */
+.hero-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.w-bottle {
+  width: 100%;
+  height: 100%;
+  /* Kanterna tonas ut så att den ljusgrå bildbakgrunden smälter in i den vita sidan.
+     Två toningar (uppifrån/nedifrån och från sidorna) som korsas. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
+    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
+    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
+  mask-composite: intersect;
+}
+/* Målningen ligger exakt över etikettens teckning (position sätts i hero.js) */
+.w-paint {
+  position: absolute;
+  background-size: 100% 100%;
+}
+/* Foto och film täcker hela skärmen */
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  visibility: hidden;
+}
 
 /* Texterna ligger ovanpå scenen. Opacitet styrs från scroll i hero.js. */
 .hero-text { position: absolute; inset: 0; pointer-events: none; }
@@ -83,35 +118,18 @@ h3 {
   text-transform: uppercase;
 }
 
-.t-product,
-.t-notes,
-.t-closing { font-family: var(--serif); font-weight: 300; }
-
-.t-product {
-  left: 8vw;
-  top: 50%;
-  margin-top: -0.6em;
-  font-size: clamp(2.4rem, 6vw, 4.6rem);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-}
-.t-notes {
-  right: 6vw;
-  top: 42%;
-  max-width: 9em;
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
-  letter-spacing: 0.08em;
-  text-align: right;
-  line-height: 1.5;
-}
-/* Till vänster – dimman breder ut sig åt höger */
+/* Ligger överst över filmens ljusa himmel */
 .t-closing {
-  left: 7vw;
-  top: 42%;
-  max-width: 7em;
-  font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+  top: 9vh;
+  left: 1rem;
+  right: 1rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
   letter-spacing: 0.1em;
   line-height: 1.3;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5);
 }
 .t-hint {
   bottom: 2rem;
@@ -129,22 +147,6 @@ h3 {
 .hero .t-hint { animation: intro 1.8s ease-out both; }
 @keyframes intro { from { opacity: 0; } }
 
-/* Ett svagt vitt sken gör texten läsbar även mot dimman */
-.t-notes, .t-closing { text-shadow: 0 0 18px #fff, 0 0 6px #fff; }
-
-/* Mobil: sidotexterna flyttas upp ovanför flaskan */
-@media (max-width: 767px) {
-  .t-product,
-  .t-notes,
-  .t-closing {
-    left: 1rem;
-    right: 1rem;
-    top: 10vh;
-    margin-top: 0;
-    max-width: none;
-    text-align: center;
-  }
-}
 
 /* Laddning: visas tills 3D-scenen är redo */
 .hero-loader {
@@ -197,16 +199,19 @@ h3 {
 }
 .hero--static .t-brand h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); letter-spacing: 0.35em; margin-right: -0.35em; }
 .hero--static .t-brand p { color: var(--muted); letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.85rem; }
-/* Visar bara Sarek-flaskan ur parfym.png */
 .static-bottle {
-  width: min(52vw, 220px);
-  aspect-ratio: 260 / 480;
-  background-size: 600% auto;
-  background-position: 73.8% 73.3%;
-  background-repeat: no-repeat;
+  width: min(100%, 720px);
+  height: auto;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
+    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
+    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
+  mask-composite: intersect;
 }
-.hero-product { font-family: var(--serif); font-size: 2.4rem; letter-spacing: 0.3em; text-transform: uppercase; }
-.hero-notes, .hero-closing { font-family: var(--serif); font-size: 1.4rem; letter-spacing: 0.08em; }
+.hero-closing { font-family: var(--serif); font-size: 1.4rem; letter-spacing: 0.08em; }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-loader i::after { animation: none; }
