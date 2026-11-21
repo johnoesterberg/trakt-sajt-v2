@@ -5,12 +5,12 @@ export const content = {
   hero: {
     brand: "TRAKT",
     tagline: "Dofter från Sverige",
-    scrollHint: "Skrolla",
-    product: "Sarek",
-    notes: "Fjäll. Kall luft. Lav. Sten.",
-    closing: "Doften av ett landskap.",
-    loading: "Laddar",
-    imageAlt: "Sarek Eau de Parfum 50 ml",
+    hint: "Välj en doft",
+    open: "Visa",
+    back: "Alla dofter",
+    cta: "Bli först att få den",
+    product: "Eau de parfum",
+    imageAlt: "Fyra parfymflaskor från Trakt: Granskog, Bohuslän, Sarek och Åker",
   },
 
   story: {
@@ -25,10 +25,34 @@ export const content = {
   scents: {
     heading: "Fyra landskap",
     items: [
-      { id: "granskog", name: "Granskog", color: "#46614b", text: "Mörk, sval och lugn. Doften av en skog: granbarr, enbär, ceder och mossa." },
-      { id: "bohuslan", name: "Bohuslän", color: "#ece4d3", text: "Salt och ljus. Doften av klippor, tång och hav en sen sommarkväll." },
-      { id: "sarek", name: "Sarek", color: "#a6b4b8", text: "Klar och kall. Doften av fjällluft, lav och sten, långt från allt." },
-      { id: "aker", name: "Åker", color: "#ede5d2", text: "Varm och mjuk. Doften av vete, hö och jord en sommardag." },
+      {
+        id: "granskog", name: "Granskog", color: "#46614b",
+        text: "Mörk, sval och lugn. Doften av en skog: granbarr, enbär, ceder och mossa.",
+        notes: "Granbarr · Enbär · Ceder · Mossa",
+        story: "Mörk, sval och lugn. Doften av en skog en tidig morgon, när luften står stilla mellan stammarna och marken är mjuk av mossa.",
+        detail: "Eau de parfum · 50 ml · 695 kr (exempelpris)",
+      },
+      {
+        id: "bohuslan", name: "Bohuslän", color: "#ece4d3",
+        text: "Salt och ljus. Doften av klippor, tång och hav en sen sommarkväll.",
+        notes: "Hav · Klippa · Tång · Salt",
+        story: "Salt och ljus. Doften av varma klippor, tång och hav en sen sommarkväll, när solen tar sin tid att gå ner.",
+        detail: "Eau de parfum · 50 ml · 695 kr (exempelpris)",
+      },
+      {
+        id: "sarek", name: "Sarek", color: "#a6b4b8",
+        text: "Klar och kall. Doften av fjällluft, lav och sten, långt från allt.",
+        notes: "Fjäll · Kall luft · Lav · Sten",
+        story: "Klar och kall. Doften av fjällluft, lav och sten, långt från allt och alla. Ett landskap som får en att andas djupare.",
+        detail: "Eau de parfum · 50 ml · 695 kr (exempelpris)",
+      },
+      {
+        id: "aker", name: "Åker", color: "#ede5d2",
+        text: "Varm och mjuk. Doften av vete, hö och jord en sommardag.",
+        notes: "Vete · Hö · Jord · Sommarluft",
+        story: "Varm och mjuk. Doften av vete, hö och jord en sommardag, med blåklint i kanten av fältet och sol i ryggen.",
+        detail: "Eau de parfum · 50 ml · 695 kr (exempelpris)",
+      },
     ],
   },
 
