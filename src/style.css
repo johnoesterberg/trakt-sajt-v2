@@ -2,6 +2,7 @@
 :root {
   --ink: #2b2e2c;
   --muted: #7b807c;
+  --line: #e4e1da;
   --bg: #ffffff;
   --granskog: #46614b;
   --bohuslan: #ece4d3;
@@ -9,6 +10,7 @@
   --aker: #ede5d2;
   --serif: "Cormorant Garamond", serif;
   --sans: "Jost", sans-serif;
+  --gutter: clamp(1rem, 5vw, 4rem);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,21 +20,164 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   font-weight: 300;
-  line-height: 1.7;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
 }
+
+img { display: block; max-width: 100%; }
 
 h1, h2, h3 {
   font-family: var(--serif);
   font-weight: 400;
   letter-spacing: 0.18em;
+  line-height: 1.2;
+}
+h2 {
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+h3 {
+  font-size: 1.35rem;
+  text-transform: uppercase;
+  margin: 1.5rem 0 0.5rem;
 }
 
-.placeholder {
+.eyebrow, .muted, .note { color: var(--muted); }
+.eyebrow { letter-spacing: 0.3em; font-size: 0.85rem; text-transform: uppercase; }
+
+/* ---------- Hero (platshållare) ---------- */
+.hero-placeholder {
   min-height: 100vh;
   display: grid;
   place-content: center;
   text-align: center;
   gap: 1rem;
+  position: relative;
 }
-.placeholder h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
-.placeholder p { color: var(--muted); letter-spacing: 0.12em; }
+.hero-placeholder h1 { font-size: clamp(2.8rem, 9vw, 5.5rem); letter-spacing: 0.3em; }
+.hero-placeholder p { color: var(--muted); letter-spacing: 0.2em; }
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Gemensamt för sektioner ---------- */
+.section {
+  padding: clamp(5rem, 14vw, 10rem) var(--gutter);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- Berättelse ---------- */
+.story { text-align: center; }
+.story-text {
+  max-width: 38rem;
+  margin: 0 auto 3rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* ---------- Kortnät ---------- */
+.grid { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+/* ---------- Doftkort ---------- */
+.scent-card { border-top: 2px solid var(--scent); padding-top: 1.5rem; }
+.scent-card p { color: var(--muted); }
+.scent-visual {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f6f4f0;
+}
+.scent-visual img { width: 100%; height: 100%; object-fit: cover; }
+
+.placeholder-visual {
+  width: 100%;
+  height: 100%;
+  min-height: 12rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(43, 46, 44, 0.55);
+}
+.placeholder-visual.on-dark { color: rgba(255, 255, 255, 0.8); }
+
+/* ---------- Produkttyper ---------- */
+.products { text-align: center; }
+.product-visual {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f6f4f0;
+}
+.product-visual img { width: 100%; height: 100%; object-fit: cover; }
+.product-card p { color: var(--muted); }
+.product-card .detail { color: var(--ink); margin-top: 0.5rem; letter-spacing: 0.05em; }
+.note { margin-top: 3rem; font-size: 0.9rem; }
+
+/* ---------- Väntelista ---------- */
+.waitlist { text-align: center; max-width: 40rem; }
+.lead { color: var(--muted); margin-bottom: 3rem; }
+.waitlist-form { display: grid; gap: 1.5rem; text-align: left; }
+.waitlist-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.waitlist-form input,
+.waitlist-form select {
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 0.6rem 0;
+  border-radius: 0;
+}
+.waitlist-form input:focus,
+.waitlist-form select:focus { outline: none; border-bottom-color: var(--ink); }
+.waitlist-form button {
+  justify-self: center;
+  margin-top: 1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ink);
+  border: none;
+  padding: 1rem 2.8rem;
+  cursor: pointer;
+  transition: background 0.4s ease;
+}
+.waitlist-form button:hover { background: var(--granskog); }
+.thanks { font-family: var(--serif); font-size: 1.6rem; letter-spacing: 0.1em; }
+
+/* ---------- Sidfot ---------- */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 4rem var(--gutter);
+  text-align: center;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+}
+.footer-brand { font-family: var(--serif); font-size: 1.3rem; letter-spacing: 0.2em; }
