@@ -47,191 +47,6 @@ h3 {
 .eyebrow, .muted, .note { color: var(--muted); }
 .eyebrow { letter-spacing: 0.3em; font-size: 0.85rem; text-transform: uppercase; }
 
-/* ---------- Hero: 800vh hög, scenen sitter fast (sticky) ---------- */
-.hero { height: 800vh; position: relative; }
-.hero-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
-  overflow: hidden;
-  background: var(--bg);
-}
-/* "Världen": flaskbilden i full storlek. Flyttas och skalas från hero.js. */
-.hero-world {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-origin: 0 0;
-}
-.w-bottle {
-  width: 100%;
-  height: 100%;
-  /* Kanterna tonas ut så att den ljusgrå bildbakgrunden smälter in i den vita sidan.
-     Två toningar (uppifrån/nedifrån och från sidorna) som korsas. */
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
-    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
-    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
-  mask-composite: intersect;
-}
-/* Krämfärgad pappersbit som döljer etikettens gamla teckning (färgen uppmätt ur flaskbilden) */
-.w-paper {
-  position: absolute;
-  background: linear-gradient(to right, rgb(242, 232, 221), rgb(239, 229, 217));
-  -webkit-mask-image:
-    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
-    linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
-    linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
-  mask-composite: intersect;
-}
-/* Målningen ligger exakt över etikettens teckning (position och mask sätts i hero.js) */
-.w-paint {
-  position: absolute;
-  background-size: 100% 100%;
-  -webkit-mask-composite: source-over, source-in;
-  mask-composite: add, intersect;
-}
-/* Foto och film täcker hela skärmen */
-.layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Texterna ligger ovanpå scenen. Opacitet styrs från scroll i hero.js. */
-.hero-text { position: absolute; inset: 0; pointer-events: none; }
-.t { position: absolute; will-change: opacity, transform; }
-
-.t-brand {
-  top: 9vh;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-.t-brand h1 {
-  font-size: clamp(2.6rem, 8vw, 5.5rem);
-  font-weight: 300;
-  letter-spacing: 0.35em;
-  margin-right: -0.35em; /* bokstavsspärren ska inte flytta texten åt vänster */
-}
-.t-brand p {
-  margin-top: 0.6rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-}
-
-/* Ligger överst över filmens ljusa himmel */
-.t-closing {
-  top: 9vh;
-  left: 1rem;
-  right: 1rem;
-  text-align: center;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
-  letter-spacing: 0.1em;
-  line-height: 1.3;
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5);
-}
-.t-hint {
-  bottom: 2rem;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.72rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-/* Mjuk intoning av titeln första gången sidan visas */
-.hero .t-brand,
-.hero .t-hint { animation: intro 1.8s ease-out both; }
-@keyframes intro { from { opacity: 0; } }
-
-
-/* Laddning: visas tills 3D-scenen är redo */
-.hero-loader {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1rem;
-  background: var(--bg);
-  transition: opacity 0.9s ease, visibility 0.9s;
-}
-.hero-loader span { font-family: var(--serif); font-size: 1.6rem; letter-spacing: 0.4em; margin-right: -0.4em; }
-.hero-loader small { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
-.hero-loader i {
-  width: 80px;
-  height: 1px;
-  background: var(--line);
-  position: relative;
-  overflow: hidden;
-}
-.hero-loader i::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  transform-origin: left;
-  animation: load 1.6s ease-in-out infinite;
-}
-@keyframes load {
-  0% { transform: scaleX(0); }
-  50% { transform: scaleX(1); transform-origin: left; }
-  51% { transform-origin: right; }
-  100% { transform: scaleX(0); transform-origin: right; }
-}
-.hero.is-ready .hero-loader { opacity: 0; visibility: hidden; }
-/* Om 3D inte kan starta: visa bara texten */
-.hero.is-failed { height: 100vh; }
-
-/* Statisk hero (prefers-reduced-motion) */
-.hero--static {
-  height: auto;
-  min-height: 100vh;
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: 1.5rem;
-  padding: 4rem var(--gutter);
-  text-align: center;
-}
-.hero--static .t-brand h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); letter-spacing: 0.35em; margin-right: -0.35em; }
-.hero--static .t-brand p { color: var(--muted); letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.85rem; }
-.static-bottle {
-  width: min(100%, 720px);
-  height: auto;
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
-    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 5.5%, #000 95%, transparent 100%),
-    linear-gradient(to right, transparent 4%, #000 26%, #000 74%, transparent 96%);
-  mask-composite: intersect;
-}
-.hero-closing { font-family: var(--serif); font-size: 1.4rem; letter-spacing: 0.08em; }
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-loader i::after { animation: none; }
-}
-
 /* ---------- Gemensamt för sektioner ---------- */
 .section {
   padding: clamp(5rem, 14vw, 10rem) var(--gutter);
@@ -344,3 +159,205 @@ h3 {
   letter-spacing: 0.12em;
 }
 .footer-brand { font-family: var(--serif); font-size: 1.3rem; letter-spacing: 0.2em; }
+
+/* ---------- Startvy: flaskorna på vit bakgrund ---------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.lineup-locked, .lineup-locked body { overflow: hidden; }
+
+.lineup { position: relative; height: 100vh; height: 100svh; min-height: 560px; }
+.lineup-stage { position: absolute; inset: 0; overflow: hidden; overflow: clip; background: var(--bg); }
+
+.lineup-brand {
+  position: absolute; top: 7vh; left: 0; right: 0; text-align: center; pointer-events: none;
+  animation: intro 1.8s ease-out both; transition: opacity 0.5s ease;
+}
+.lineup-brand p:first-child {
+  font-family: var(--serif); font-weight: 300; line-height: 1.2;
+  font-size: clamp(2.2rem, 6.5vw, 4.6rem); letter-spacing: 0.35em; margin-right: -0.35em;
+}
+.lineup-brand p:last-child {
+  margin-top: 0.6rem; color: var(--muted); font-size: 0.8rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+}
+.lineup-hint {
+  position: absolute; left: 0; right: 0; bottom: 1.8rem; text-align: center;
+  font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--muted); pointer-events: none; transition: opacity 0.5s ease;
+  animation: intro 1.8s ease-out both;
+}
+@keyframes intro { from { opacity: 0; } }
+
+/* Världen = raden med flaskor. Den zoomas när man klickar på en flaska. */
+.lineup-world {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 9vh;
+  transition: transform 1.3s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.lineup-row {
+  display: flex; gap: clamp(0.4rem, 2vw, 2.2rem); align-items: flex-end; justify-content: center;
+}
+
+/* En flaska. Fotot beskärs ur en bild som är 2752 × 1536 px, med flaskan i mitten. */
+.bottle {
+  --bw: min(23vw, 42svh, 340px);
+  position: relative; display: block; flex: none; padding: 0; border: none; cursor: pointer;
+  width: var(--bw); aspect-ratio: 950 / 1380;
+  background: #fff; color: inherit; font: inherit;
+  container-type: inline-size;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottle-photo {
+  position: absolute; inset: 0;
+  background-repeat: no-repeat;
+  background-size: 289.7% auto; background-position: 49.94% 38.46%;
+  mix-blend-mode: multiply; /* gör fotots ljusgrå bakgrund helt vit */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 4%, #000 94%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 4%, #000 94%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-composite: intersect;
+  transition: filter 0.55s ease;
+  filter: brightness(1.1) contrast(1.05) drop-shadow(0 0.6rem 0.9rem rgba(40, 36, 30, 0.1));
+}
+/* Osynlig punkt mitt på etiketten: dit zoomar vi när man klickar */
+.bottle-anchor { position: absolute; pointer-events: none; }
+
+.bottle-shadow {
+  position: absolute; left: 12%; right: 12%; bottom: 3%; height: 5%;
+  background: radial-gradient(ellipse at center, rgba(40, 36, 30, 0.28), transparent 70%);
+  filter: blur(4px); transition: transform 0.55s ease, opacity 0.55s ease;
+}
+.bottle-name {
+  position: absolute; left: 0; right: 0; top: calc(100% + 0.5rem);
+  font-family: var(--serif); font-size: clamp(0.75rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.3em; text-transform: uppercase; white-space: nowrap;
+  color: var(--muted); transition: color 0.4s ease, opacity 0.5s ease;
+}
+
+/* Hover/fokus: flaskan lyfter och blir lite större, skuggan på underlaget krymper */
+.bottle:hover, .bottle:focus-visible, .bottle.is-active { transform: translateY(-16px) scale(1.05); outline: none; }
+.bottle:hover .bottle-photo, .bottle:focus-visible .bottle-photo, .bottle.is-active .bottle-photo {
+  filter: brightness(1.1) contrast(1.05) drop-shadow(0 1.4rem 1.6rem rgba(40, 36, 30, 0.2));
+}
+.bottle:hover .bottle-shadow, .bottle:focus-visible .bottle-shadow, .bottle.is-active .bottle-shadow {
+  transform: scaleX(0.82); opacity: 0.55;
+}
+.bottle:hover .bottle-name, .bottle:focus-visible .bottle-name { color: var(--ink); }
+.lineup-row:has(.bottle:hover) .bottle:not(:hover) { opacity: 0.72; }
+
+/* När en doft öppnas: de andra flaskorna och texterna tonas bort */
+.lineup-stage.is-open .lineup-brand,
+.lineup-stage.is-open .lineup-hint,
+.lineup-stage.is-open .bottle-name { opacity: 0; }
+.lineup-stage.is-open .bottle { pointer-events: none; }
+.lineup-stage.is-open .bottle:not(.is-active) { opacity: 0 !important; }
+
+@media (max-width: 700px) {
+  .lineup-world { padding-top: 12vh; }
+  .lineup-row { display: grid; grid-template-columns: repeat(2, auto); gap: 2.2rem 1.2rem; }
+  .bottle { --bw: min(38vw, 22svh); }
+}
+
+/* ---------- Doftvy: landskapet man åker in i ---------- */
+.scent-view {
+  position: absolute; inset: 0; z-index: 2; overflow: hidden; overflow: clip;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.9s ease, visibility 0.9s;
+  color: var(--ink);
+}
+.scent-view.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+.view-bg, .view-film {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  background-size: cover; background-position: 44% 50%; object-fit: cover;
+  object-position: 44% 50%;
+}
+.view-bg { transform: scale(1.06); transition: transform 9s ease-out; }
+.scent-view.is-open .view-bg { transform: scale(1); }
+/* Saknas landskapsbild: doftens färg, med en mjuk ljusning mot höger */
+.view-bg--plain {
+  background: linear-gradient(115deg, var(--scent) 0%, color-mix(in srgb, var(--scent) 55%, #fff) 100%);
+}
+.view-film { opacity: 0; transition: opacity 1.2s ease; }
+.view-film.is-on { opacity: 1; }
+
+/* Ljus toning från vänster så att texten alltid går att läsa */
+.view-shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to right, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.65) 32%, rgba(255,255,255,0) 68%);
+}
+.view--dark { color: #f3efe6; }
+.view--dark .view-shade {
+  background: linear-gradient(to right, rgba(14,22,16,0.8) 0%, rgba(14,22,16,0.45) 38%, rgba(14,22,16,0) 72%);
+}
+
+.view-text {
+  position: absolute; left: var(--gutter); top: 50%;
+  width: min(30rem, calc(100% - 2 * var(--gutter)));
+  transform: translateY(-50%);
+}
+.view-text > * {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.scent-view.is-open .view-text > * { opacity: 1; transform: none; }
+.scent-view.is-open .view-text > :nth-child(2) { transition-delay: 0.15s; }
+.scent-view.is-open .view-text > :nth-child(3) { transition-delay: 0.3s; }
+.scent-view.is-open .view-text > :nth-child(4) { transition-delay: 0.45s; }
+.scent-view.is-open .view-text > :nth-child(5) { transition-delay: 0.6s; }
+.scent-view.is-open .view-text > :nth-child(6) { transition-delay: 0.75s; }
+
+.view-eyebrow { font-size: 0.78rem; letter-spacing: 0.35em; text-transform: uppercase; opacity: 0.7; }
+.view-text h2 {
+  text-align: left; margin: 0.6rem 0 1rem;
+  font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 300; letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.view-notes {
+  font-family: var(--serif); font-size: 1.3rem; letter-spacing: 0.08em; margin-bottom: 1.2rem;
+}
+.view-story { max-width: 26rem; }
+.view-detail { margin-top: 1.4rem; font-size: 0.85rem; letter-spacing: 0.12em; opacity: 0.75; }
+.view-cta {
+  display: inline-block; margin-top: 2rem; padding: 0.9rem 2.2rem;
+  font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
+  color: #fff; background: var(--ink); transition: background 0.4s ease;
+}
+.view-cta:hover { background: var(--granskog); }
+.view--dark .view-cta { color: var(--ink); background: #f3efe6; }
+.view--dark .view-cta:hover { background: #fff; }
+
+.view-close {
+  position: absolute; top: 1.6rem; left: var(--gutter);
+  font: inherit; font-size: 0.78rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: inherit; background: none; border: none; cursor: pointer; padding: 0.4rem 0;
+  border-bottom: 1px solid transparent; transition: border-color 0.3s ease;
+}
+.view-close:hover, .view-close:focus-visible { border-bottom-color: currentColor; outline: none; }
+
+@media (max-width: 767px) {
+  .view-shade {
+    background: linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0) 85%);
+  }
+  .view--dark .view-shade {
+    background: linear-gradient(to top, rgba(14,22,16,0.88) 0%, rgba(14,22,16,0.6) 50%, rgba(14,22,16,0) 85%);
+  }
+  .view-text { top: auto; bottom: 2rem; transform: none; }
+  .view-text h2 { font-size: clamp(2.2rem, 11vw, 3.2rem); margin-bottom: 0.6rem; }
+  .view-notes { font-size: 1.1rem; margin-bottom: 0.6rem; }
+  .view-cta { margin-top: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lineup-world, .scent-view, .view-bg, .view-text > * { transition-duration: 0.01s; }
+  .lineup-hint { animation: none; }
+}
